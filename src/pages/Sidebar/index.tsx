@@ -5,6 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import { AppState, BlogType } from '../dashBoard/types';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../dashBoard/actions'
+import { SelectChangeEvent } from '@mui/material/Select';
 import {  Box, Button, FormControl,  InputLabel, ListItemButton, ListItemText, MenuItem, Select, TextField } from '@mui/material';
 export default function SideBar() {
   const [open, setOpen] = React.useState(false);
@@ -45,6 +46,11 @@ export default function SideBar() {
     const { name, value } = event.target;
      setForm({...form, [name]:value})
   }
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    event.preventDefault()
+    const { name, value } = event.target;
+     setForm({...form, [name]:value})
+  };
   const DrawerList = (
 <Box sx={{ mt: 1,mb:1 }}>
 <Box sx={{ m:2 }}>
@@ -58,14 +64,14 @@ export default function SideBar() {
     </FormControl>
     </Box>
     <Box sx={{ m:3 }}>    <FormControl fullWidth className="form">
-  <InputLabel id="demo-simple-select-label" value={form.categories}>Category</InputLabel>
+  <InputLabel id="demo-simple-select-label" >Category</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
     value={form.categories}
     label="Category"
     name='categories'
-    onChange={handleChange}
+    onChange={handleSelectChange}
   >
     <MenuItem value={'Sports'}>Sports</MenuItem>
     <MenuItem value={'Cinema'}>Cinema</MenuItem>

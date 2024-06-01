@@ -21,8 +21,10 @@ import SideBar from '../Sidebar';
 import NoDataFound from '../NoDataFound';
 function DashBoard() {
     const dispatch=useDispatch()
-
-    const colorCode={
+    interface ColorCode  {
+      [key: string]: string;
+    }
+    const colorCode:ColorCode ={
      Sports:'red',
       Cinema:'blue',
       Politics:'green'
@@ -37,11 +39,11 @@ function DashBoard() {
         <div className="blogs">
        { blogs.length>0 ? (blogs.map((ele:BlogType)=>{ 
       const avatar=ele.categories.slice(0,1).toUpperCase()
-
+const key=colorCode[ele.categories as keyof ColorCode]
   return <Card sx={{ maxWidth: 800 }} key={ele.id}>
   <CardHeader
     avatar={
-      <Avatar sx={{ bgcolor:colorCode[ele.categories]  }} aria-label="recipe">
+      <Avatar sx={{ bgcolor: key }} aria-label="recipe">
         {avatar}
       </Avatar>
     }
