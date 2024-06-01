@@ -4,8 +4,22 @@ import { v4 as uuidv4 } from 'uuid';
 const initialState:BlogState = { blogs:[],
 sideBlog:'',editPayload:null}
 
+export const generateUniqueStringWithTimestamp = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const second = String(now.getSeconds()).padStart(2, '0');
+    const miliseconds = String(now.getMilliseconds());
+  
+    return `${year}${month}${day}${hour}${minute}${second}${miliseconds}`;
+}
+
 export function blogReducer(state = initialState, action:BlogActionType) {
-    const id=uuidv4()
+
+    const id:string=generateUniqueStringWithTimestamp()+''+uuidv4()
   switch(action.type){
     case actionCreator.addBlog:
         action.payload.id=id

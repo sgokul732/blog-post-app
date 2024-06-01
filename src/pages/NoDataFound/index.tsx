@@ -1,8 +1,24 @@
-import React from 'react'
+import { Card, CardHeader, Avatar, CardContent, Typography } from '@mui/material'
+import { red } from '@mui/material/colors'
 
 function NoDataFound() {
   return (
-    <div>NoDataFound</div>
+    <Card sx={{ maxWidth: 800 }} >
+  <CardHeader
+    avatar={
+      <Avatar sx={{ bgcolor:red[500]  }} aria-label="recipe">
+        No
+      </Avatar>
+    }
+    title={'No Blogs Found'}
+  />
+  <CardContent>
+    <Typography variant="body2" color="text.secondary">
+     No Blogs Found
+    </Typography>
+  </CardContent>
+
+</Card>
   )
 }
 

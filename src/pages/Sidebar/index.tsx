@@ -32,15 +32,19 @@ export default function SideBar() {
      if(sideBlog){
         setOpen(true)
      }
+     else{
+      setOpen(false)
+     }
      
      if(sideBlog.localeCompare('Edit')===0 && editPayload){
         setForm({...editPayload})
      }
   },[sideBlog,editPayload])
-  const handleChange=(e)=>{
-     setForm({...form, [e.target.name]:e.target.value})
+  const handleChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
+    event.preventDefault()
+    const { name, value } = event.target;
+     setForm({...form, [name]:value})
   }
-  console.log(form,'ppp')
   const DrawerList = (
 <Box sx={{ mt: 1,mb:1 }}>
 <Box sx={{ m:2 }}>
@@ -70,18 +74,20 @@ export default function SideBar() {
 </FormControl>
 </Box>
 <Box sx={{ m:3 }}> 
-<TextField id="outlined-basic" minRows={40} label="Description" value={form.description} variant="outlined" name='description' onChange={handleChange} />
+<TextField id="outlined-basic"  label="Description" value={form.description} variant="outlined" name='description' onChange={handleChange} />
   
 </Box> 
-<Box sx={{ m:3 }} alignItems={'center'}> 
+<Box sx={{ m:3 }}  display="flex" justifyContent="space-between"> 
 <Button variant="contained"  onClick={()=>sideBlog.localeCompare('Edit')?dispatch(actions.addBlog(form)):dispatch(actions.editBlog(form))}>{sideBlog} Blog</Button>
+<Button variant="outlined"  onClick={()=>dispatch(actions.sideBlog('',null))}>Cancel</Button>
+
 </Box>
     </Box>
   );
 
   return (
     <div>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </div>
