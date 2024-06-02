@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.css';
 import Drawer from '@mui/material/Drawer';
-
+import MuiAlert from '@mui/material/Alert';
 import { AppState, BlogType } from '../dashBoard/types';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../dashBoard/actions';
@@ -20,6 +20,7 @@ import {
 export default function SideBar() {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [snack, setSnack] = React.useState('');
   const [form, setForm] = React.useState<BlogType>({
     title: '',
     categories: '',
@@ -31,13 +32,10 @@ export default function SideBar() {
   const { sideBlog, editPayload, blogs } = useSelector((state: AppState) => state.blogReducer);
 
   function addEditBlog(): void {
-    const duplicate = blogs.filter(
+    const duplicate = blogs.find(
       (ele: BlogType) => ele.title.toLowerCase().localeCompare(form.title) === 0
     );
-    if (duplicate.length > 0 && sideBlog.localeCompare('Add') === 0) {
-      setError(true);
-      return;
-    } else if (duplicate.length > 1 && sideBlog.localeCompare('Edit') === 0) {
+    if (duplicate && sideBlog.localeCompare('Add') === 0) {
       setError(true);
       return;
     } else {
@@ -45,9 +43,14 @@ export default function SideBar() {
     }
     if (sideBlog.localeCompare('Edit') === 0) {
       dispatch(actions.editBlog(form));
+      setSnack('Data updated succesfully');
     } else {
       dispatch(actions.addBlog(form));
+      setSnack('Data added succesfully');
     }
+    setTimeout(() => {
+      setSnack('');
+    }, 1000);
   }
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -91,6 +94,7 @@ export default function SideBar() {
             label="Title"
             variant="outlined"
             name="title"
+            disabled={sideBlog.localeCompare('Edit') === 0}
             helperText={error && 'Title already exists.'}
             error={error}
             value={form.title}
@@ -108,8 +112,7 @@ export default function SideBar() {
             value={form.categories}
             label="Category"
             name="categories"
-            onChange={handleSelectChange}
-          >
+            onChange={handleSelectChange}>
             <MenuItem value={'Sports'}>Sports</MenuItem>
             <MenuItem value={'Cinema'}>Cinema</MenuItem>
             <MenuItem value={'Politics'}>Politcs</MenuItem>
@@ -136,6 +139,11 @@ export default function SideBar() {
           Cancel
         </Button>
       </Box>
+      {snack && (
+        <MuiAlert elevation={6} variant="filled" severity="success">
+          {snack}
+        </MuiAlert>
+      )}
     </Box>
   );
 

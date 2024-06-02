@@ -10,3 +10,8 @@ export interface DeleteActionType {
 export interface Iprops {
   data: BlogType;
 }
+
+export interface DeleteContextType {
+  shouldDelete: boolean;
+  setShouldDelete: (data: boolean) => void;
+}

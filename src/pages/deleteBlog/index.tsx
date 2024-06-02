@@ -2,13 +2,13 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import { useDispatch, useSelector } from 'react-redux';
-import * as actions from './actions';
+import { useDispatch } from 'react-redux';
 import { Iprops } from './types';
 import { Button } from '@mui/material';
 import './style.css';
 import { deleteBlog } from '../dashBoard/actions';
-import { AppState } from '../dashBoard/types';
+import { useContext } from 'react';
+import { DeleteContext } from '../dashBoard';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -24,11 +24,11 @@ const style = {
 };
 
 export function DeleteBlog(props: Iprops) {
-  const { shouldDelete } = useSelector((state: AppState) => state.deleteReducer);
   const dispatch = useDispatch();
+  const { shouldDelete, setShouldDelete } = useContext(DeleteContext);
   const handleClose = () => {
-    dispatch(actions.deleteModal());
     dispatch(deleteBlog(props.data));
+    setShouldDelete(false);
   };
 
   return (
@@ -36,8 +36,7 @@ export function DeleteBlog(props: Iprops) {
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
       open={shouldDelete}
-      onClose={handleClose}
-    >
+      onClose={handleClose}>
       <Fade in={shouldDelete}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">

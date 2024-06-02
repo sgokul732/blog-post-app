@@ -13,11 +13,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, BlogType } from './types';
 import { Button } from '@mui/material';
-import * as deleteAction from '../deleteBlog/actions';
 import * as actions from './actions';
 import DeleteBlog from '../deleteBlog';
 import SideBar from '../Sidebar';
 import NoDataFound from '../NoDataFound';
+import { useState, createContext } from 'react';
+import { DeleteContextType } from '../deleteBlog/types';
+export const DeleteContext = createContext<DeleteContextType>({
+  shouldDelete: false,
+  setShouldDelete: (data: boolean) => {
+    return data;
+  }
+});
 function DashBoard() {
   const dispatch = useDispatch();
   type ColorCode = Record<string, string>;
@@ -28,15 +35,14 @@ function DashBoard() {
   };
 
   const { blogs } = useSelector((state: AppState) => state.blogReducer);
-  const { shouldDelete } = useSelector((state: AppState) => state.deleteReducer);
+  const [shouldDelete, setShouldDelete] = useState(false);
   return (
     <div className="dashBoard">
       <SideBar />
       <Button
         variant="contained"
         className="addBlog"
-        onClick={() => dispatch(actions.sideBlog('Add', null))}
-      >
+        onClick={() => dispatch(actions.sideBlog('Add', null))}>
         + Add Blog
       </Button>
       <div className="blogs">
@@ -63,25 +69,24 @@ function DashBoard() {
                 <CardActions>
                   <IconButton
                     aria-label="add to favorites"
-                    onClick={() => dispatch(actions.likeBlog(ele))}
-                  >
+                    onClick={() => dispatch(actions.likeBlog(ele))}>
                     <FavoriteIcon />
                   </IconButton>
                   {ele.likes} Likes
                   <IconButton
                     aria-label="add to favorites"
-                    onClick={() => dispatch(actions.sideBlog('Edit', ele))}
-                  >
+                    onClick={() => dispatch(actions.sideBlog('Edit', ele))}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton
-                    aria-label="add to favorites"
-                    onClick={() => dispatch(deleteAction.deleteModal())}
-                  >
+                  <IconButton aria-label="add to favorites" onClick={() => setShouldDelete(true)}>
                     <DeleteIcon />
                   </IconButton>
                 </CardActions>
-                {shouldDelete && <DeleteBlog data={ele} />}
+                {shouldDelete && (
+                  <DeleteContext.Provider value={{ shouldDelete, setShouldDelete }}>
+                    <DeleteBlog data={ele} />
+                  </DeleteContext.Provider>
+                )}
               </Card>
             );
           })
