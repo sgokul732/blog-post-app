@@ -1,1 +1,1 @@
-export const deleteModal='DELETE_MODAL'
+export const deleteModal = 'DELETE_MODAL';

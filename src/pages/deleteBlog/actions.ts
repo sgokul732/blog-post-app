@@ -1,8 +1,7 @@
-
-import * as actionCreators from './actionCreator'
+import * as actionCreators from './actionCreator';
 
 export const deleteModal = () => {
-    return {
-      type: actionCreators.deleteModal,
-    }
-}
+  return {
+    type: actionCreators.deleteModal
+  };
+};
